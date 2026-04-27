@@ -21,17 +21,16 @@ func Init(level string) {
 		lvl = slog.LevelInfo
 	}
 
-	env := os.Getenv("LOG_ENV") // prod | dev | local
+	env := os.Getenv("LOG_ENV")
 
 	var handler slog.Handler
 
 	if env == "prod" {
-		// JSON for machines
 		handler = slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
 			Level: lvl,
 		})
 	} else {
-		// human-readable (colored by terminal)
+
 		handler = slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
 			Level: lvl,
 		})

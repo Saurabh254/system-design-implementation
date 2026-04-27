@@ -1,0 +1,20 @@
+basePath: /
+host: localhost:8080
+info:
+  contact: {}
+  description: API for rate limiting service
+  title: Rate Limiter API
+  version: "1.0"
+paths:
+  /health:
+    get:
+      description: check server status
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: Health check
+      tags:
+      - health
+swagger: "2.0"
