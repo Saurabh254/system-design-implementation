@@ -1,6 +1,10 @@
 package routes
 
-import "net/http"
+import (
+	"net/http"
+
+	"github.com/saurabh254/system-design-implementation/ratelimiter/internal/service"
+)
 
 // HealthCheck godoc
 // @Summary Health check
@@ -9,5 +13,5 @@ import "net/http"
 // @Success 200 {string} string "ok"
 // @Router /health [get]
 func healthHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("ok"))
+	service.HealthService(w, r)
 }
