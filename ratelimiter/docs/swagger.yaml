@@ -6,6 +6,21 @@ info:
   title: Rate Limiter API
   version: "1.0"
 paths:
+  /api/v1/rate-limit/status:
+    get:
+      consumes:
+      - application/json
+      description: get string by ID
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Show an account
+      tags:
+      - accounts
   /health:
     get:
       description: check server status

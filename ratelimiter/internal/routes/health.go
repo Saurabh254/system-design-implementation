@@ -15,3 +15,9 @@ import (
 func healthHandler(w http.ResponseWriter, r *http.Request) {
 	service.HealthService(w, r)
 }
+
+func HealthHandlerRouter() http.Handler {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/health", healthHandler)
+	return mux
+}

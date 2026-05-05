@@ -8,17 +8,24 @@ import (
 	"github.com/saurabh254/system-design-implementation/ratelimiter/internal/middleware"
 )
 
-func NewRouter() http.Handler {
+func v1Router() http.Handler {
 	mux := http.NewServeMux()
+	mux.Handle("/rate-limit/", http.StripPrefix("/rate-limit", RateLimitRouter()))
 
+	return mux
+}
+
+func NewRouter() http.Handler {
+
+	// Top-level mux — no prefix required
+	mux := http.NewServeMux()
 	mux.Handle("/docs/", httpSwagger.WrapHandler)
-	mux.HandleFunc("/health", healthHandler)
+	mux.Handle("/health", HealthHandlerRouter())
+	mux.Handle("/api/v1/", http.StripPrefix("/api/v1", v1Router()))
 
-	handler := middleware.Chain(
+	return middleware.Chain(
 		mux,
 		middleware.EnrichHeaders,
 		middleware.LogRequest,
 	)
-
-	return handler
 }
