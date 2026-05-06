@@ -15,9 +15,9 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/v1/rate-limit/status": {
-            "get": {
-                "description": "get string by ID",
+        "/api/v1/ratelimit/status": {
+            "post": {
+                "description": "Returns the current rate limit status for the specified entity.",
                 "consumes": [
                     "application/json"
                 ],
@@ -25,14 +25,25 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "accounts"
+                    "ratelimit"
                 ],
-                "summary": "Show an account",
+                "summary": "Show rate limit status",
+                "parameters": [
+                    {
+                        "description": "Rate limit request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schemas.RateLimitRequest"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/schemas.RateLimitResponse"
                         }
                     }
                 }
@@ -52,6 +63,36 @@ const docTemplate = `{
                             "type": "string"
                         }
                     }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "schemas.RateLimitRequest": {
+            "type": "object",
+            "properties": {
+                "entity_id": {
+                    "type": "string"
+                },
+                "entity_type": {
+                    "type": "string"
+                }
+            }
+        },
+        "schemas.RateLimitResponse": {
+            "type": "object",
+            "properties": {
+                "is_allowed": {
+                    "type": "boolean"
+                },
+                "retry_after_seconds": {
+                    "type": "integer"
+                },
+                "tokens_capacity": {
+                    "type": "integer"
+                },
+                "tokens_remaining": {
+                    "type": "integer"
                 }
             }
         }

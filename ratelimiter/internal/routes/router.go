@@ -10,7 +10,7 @@ import (
 
 func v1Router() http.Handler {
 	mux := http.NewServeMux()
-	mux.Handle("/rate-limit/", http.StripPrefix("/rate-limit", RateLimitRouter()))
+	mux.Handle("/ratelimit/", http.StripPrefix("/ratelimit", RateLimitRouter()))
 
 	return mux
 }

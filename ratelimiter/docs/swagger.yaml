@@ -1,4 +1,23 @@
 basePath: /
+definitions:
+  schemas.RateLimitRequest:
+    properties:
+      entity_id:
+        type: string
+      entity_type:
+        type: string
+    type: object
+  schemas.RateLimitResponse:
+    properties:
+      is_allowed:
+        type: boolean
+      retry_after_seconds:
+        type: integer
+      tokens_capacity:
+        type: integer
+      tokens_remaining:
+        type: integer
+    type: object
 host: localhost:8080
 info:
   contact: {}
@@ -6,21 +25,28 @@ info:
   title: Rate Limiter API
   version: "1.0"
 paths:
-  /api/v1/rate-limit/status:
-    get:
+  /api/v1/ratelimit/status:
+    post:
       consumes:
       - application/json
-      description: get string by ID
+      description: Returns the current rate limit status for the specified entity.
+      parameters:
+      - description: Rate limit request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.RateLimitRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            type: string
-      summary: Show an account
+            $ref: '#/definitions/schemas.RateLimitResponse'
+      summary: Show rate limit status
       tags:
-      - accounts
+      - ratelimit
   /health:
     get:
       description: check server status
