@@ -1,12 +1,5 @@
 basePath: /
 definitions:
-  schemas.RateLimitRequest:
-    properties:
-      entity_id:
-        type: string
-      entity_type:
-        type: string
-    type: object
   schemas.RateLimitResponse:
     properties:
       is_allowed:
@@ -25,18 +18,22 @@ info:
   title: Rate Limiter API
   version: "1.0"
 paths:
-  /api/v1/ratelimit/status:
-    post:
+  /api/v1/ratelimit/{entity_type}/{entity_id}/status:
+    get:
       consumes:
       - application/json
       description: Returns the current rate limit status for the specified entity.
       parameters:
-      - description: Rate limit request
-        in: body
-        name: request
+      - description: Entity type
+        in: path
+        name: entity_type
         required: true
-        schema:
-          $ref: '#/definitions/schemas.RateLimitRequest'
+        type: string
+      - description: Entity ID
+        in: path
+        name: entity_id
+        required: true
+        type: string
       produces:
       - application/json
       responses:

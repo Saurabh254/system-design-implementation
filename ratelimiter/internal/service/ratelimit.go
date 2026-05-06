@@ -12,14 +12,12 @@ import (
 
 func GetRateLimitStatus(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 	var req schemas.RateLimitRequest
-	err := httpx.DecodeJSONBody(w, r, &req)
-	if err != nil {
-		http.Error(w, "invalid JSON payload", http.StatusBadRequest)
-		return
-	}
+
+	req.EntityID = r.PathValue("entity_id")
+	req.EntityType = r.PathValue("entity_type")
 
 	if req.EntityID == "" || req.EntityType == "" {
-		http.Error(w, "entity_id and entity_type are not provided in the payload", http.StatusBadRequest)
+		httpx.Error(w, http.StatusBadRequest, "Invalid query parameters")
 		return
 	}
 

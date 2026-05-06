@@ -38,3 +38,7 @@ func Init(level string) {
 
 	Log = slog.New(handler)
 }
+
+func GetLogger() *slog.Logger {
+	return Log
+}

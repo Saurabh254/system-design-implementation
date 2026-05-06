@@ -10,7 +10,7 @@ import (
 func RateLimitRouter() http.Handler {
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("/status", getRateLimitHandler)
+	mux.HandleFunc("/{entity_type}/{entity_id}/status", getRateLimitHandler)
 	return mux
 }
 
@@ -21,9 +21,10 @@ func RateLimitRouter() http.Handler {
 // @Tags         ratelimit
 // @Accept       json
 // @Produce      json
-// @Param        request  body      schemas.RateLimitRequest  true  "Rate limit request"
+// @Param        entity_type path string true "Entity type"
+// @Param        entity_id path string true "Entity ID"
 // @Success      200  {object}  schemas.RateLimitResponse
-// @Router       /api/v1/ratelimit/status [post]
+// @Router       /api/v1/ratelimit/{entity_type}/{entity_id}/status [get]
 func getRateLimitHandler(
 	w http.ResponseWriter,
 	r *http.Request,

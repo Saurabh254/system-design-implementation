@@ -15,8 +15,8 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/v1/ratelimit/status": {
-            "post": {
+        "/api/v1/ratelimit/{entity_type}/{entity_id}/status": {
+            "get": {
                 "description": "Returns the current rate limit status for the specified entity.",
                 "consumes": [
                     "application/json"
@@ -30,13 +30,18 @@ const docTemplate = `{
                 "summary": "Show rate limit status",
                 "parameters": [
                     {
-                        "description": "Rate limit request",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/schemas.RateLimitRequest"
-                        }
+                        "type": "string",
+                        "description": "Entity type",
+                        "name": "entity_type",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Entity ID",
+                        "name": "entity_id",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -68,17 +73,6 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "schemas.RateLimitRequest": {
-            "type": "object",
-            "properties": {
-                "entity_id": {
-                    "type": "string"
-                },
-                "entity_type": {
-                    "type": "string"
-                }
-            }
-        },
         "schemas.RateLimitResponse": {
             "type": "object",
             "properties": {
