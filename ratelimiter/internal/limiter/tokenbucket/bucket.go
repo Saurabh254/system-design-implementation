@@ -107,6 +107,7 @@ type TokenBucket struct {
 	entity   string
 	entityID string
 	rdb      *redis.Client
+	user_id  string
 }
 
 // New returns a TokenBucket for the given entity and ID.
@@ -116,6 +117,7 @@ func New(entity, entityID string, rdb *redis.Client) *TokenBucket {
 		entity:   entity,
 		entityID: entityID,
 		rdb:      rdb,
+		user_id:  "string",
 	}
 }
 
@@ -152,7 +154,7 @@ func (tb *TokenBucket) Consume(ctx context.Context) (schemas.RateLimitResponse, 
 	keys := []string{
 		tokensKey(tb.entity, tb.entityID),
 		lastFilledKey(tb.entity, tb.entityID),
-		configKey(tb.entity),
+		configKey(tb.user_id),
 	}
 	args := []any{DefaultCapacity, DefaultFillRate, time.Now().Unix()}
 

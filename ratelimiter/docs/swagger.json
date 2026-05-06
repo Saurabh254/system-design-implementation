@@ -9,6 +9,40 @@
     "host": "localhost:8080",
     "basePath": "/",
     "paths": {
+        "/api/v1/ratelimit/consume": {
+            "post": {
+                "description": "Consumes a rate limit for the specified entity.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ratelimit"
+                ],
+                "summary": "consume rate limit",
+                "parameters": [
+                    {
+                        "description": "Rate limit consume request",
+                        "name": "Request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schemas.RateLimitRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.RateLimitResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/ratelimit/{entity_type}/{entity_id}/status": {
             "get": {
                 "description": "Returns the current rate limit status for the specified entity.",
@@ -67,6 +101,17 @@
         }
     },
     "definitions": {
+        "schemas.RateLimitRequest": {
+            "type": "object",
+            "properties": {
+                "entity_id": {
+                    "type": "string"
+                },
+                "entity_type": {
+                    "type": "string"
+                }
+            }
+        },
         "schemas.RateLimitResponse": {
             "type": "object",
             "properties": {

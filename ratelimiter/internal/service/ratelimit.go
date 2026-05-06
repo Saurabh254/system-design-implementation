@@ -31,3 +31,32 @@ func GetRateLimitStatus(ctx context.Context, w http.ResponseWriter, r *http.Requ
 	}
 	httpx.JSON(w, http.StatusOK, response)
 }
+
+func ConsumeRateLimit(ctx context.Context, w http.ResponseWriter, r *http.Request) {
+	var req schemas.RateLimitRequest
+
+	if err := httpx.DecodeJSON(r, &req); err != nil {
+		httpx.Error(w, http.StatusBadRequest, "Invalid request body")
+		return
+	}
+
+	if req.EntityID == "" || req.EntityType == "" {
+		httpx.Error(w, http.StatusBadRequest, "Entity ID and type are required")
+		return
+	}
+
+	rdb := store.NewClient()
+	tb := tokenbucket.New(req.EntityType, req.EntityID, rdb)
+
+	response, err := tb.Consume(ctx)
+	if err != nil {
+		http.Error(w, "failed to consume rate limit", http.StatusInternalServerError)
+		return
+	}
+
+	if response.IsAllowed {
+		httpx.JSON(w, http.StatusOK, response)
+	} else {
+		httpx.JSON(w, http.StatusTooManyRequests, response)
+	}
+}

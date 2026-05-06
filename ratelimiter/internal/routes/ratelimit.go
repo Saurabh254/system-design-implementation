@@ -10,7 +10,8 @@ import (
 func RateLimitRouter() http.Handler {
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("/{entity_type}/{entity_id}/status", getRateLimitHandler)
+	mux.HandleFunc("/{entity_type}/{entity_id}/status", getRateLimitStatus)
+	mux.HandleFunc("/consume", consumeRateLimitEntity)
 	return mux
 }
 
@@ -25,13 +26,36 @@ func RateLimitRouter() http.Handler {
 // @Param        entity_id path string true "Entity ID"
 // @Success      200  {object}  schemas.RateLimitResponse
 // @Router       /api/v1/ratelimit/{entity_type}/{entity_id}/status [get]
-func getRateLimitHandler(
+func getRateLimitStatus(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
 	ctx := r.Context()
 
 	service.GetRateLimitStatus(
+		ctx,
+		w,
+		r,
+	)
+}
+
+// RateLimit godoc
+//
+// @Summary      consume rate limit
+// @Description  Consumes a rate limit for the specified entity.
+// @Tags         ratelimit
+// @Accept       json
+// @Produce      json
+// @Param        Request body schemas.RateLimitRequest true "Rate limit consume request"
+// @Success      200  {object}  schemas.RateLimitResponse
+// @Router       /api/v1/ratelimit/consume [post]
+func consumeRateLimitEntity(
+	w http.ResponseWriter,
+	r *http.Request,
+) {
+	ctx := r.Context()
+
+	service.ConsumeRateLimit(
 		ctx,
 		w,
 		r,

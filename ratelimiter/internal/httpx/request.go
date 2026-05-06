@@ -6,8 +6,7 @@ import (
 	"net/http"
 )
 
-func DecodeJSONBody(
-	w http.ResponseWriter,
+func DecodeJSON(
 	r *http.Request,
 	dst interface{},
 ) error {
