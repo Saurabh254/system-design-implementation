@@ -9,7 +9,17 @@ type RedisStore struct {
 	Client *redis.Client
 }
 
+var redisClient *redis.Client
+
+func init() {
+	redisClient = NewClient()
+}
+
 func NewClient() *redis.Client {
+
+	if redisClient != nil {
+		return redisClient
+	}
 	config := config.Load()
 	rdb := redis.NewClient(&redis.Options{
 		Addr:     config.RedisAddr,
