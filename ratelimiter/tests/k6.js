@@ -6,8 +6,8 @@ export const success200 = new Counter("success_200");
 export const rejected429 = new Counter("rejected_429");
 
 export const options = {
-	vus: 100,
-	duration: "30s",
+	vus: 10,
+	duration: "100s",
 };
 
 export default function () {
